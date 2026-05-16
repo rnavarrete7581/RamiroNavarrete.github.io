@@ -1,150 +1,102 @@
-// script.js - Carga de archivos + Calculadora avanzada
+// script.js - Calculadora avanzada + descargas
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('✅ DOM cargado - Iniciando aplicación');
 
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('🚀 Sitio de Ramiro Navarrete ');
-
-    // ========== 1. ACTUALIZAR AÑO EN FOOTER ==========
-    const footerYear = document.querySelector('footer p');
-    if (footerYear) {
-        const currentYear = new Date().getFullYear();
-        footerYear.innerHTML = `&copy; ${currentYear} Ramiro Navarrete. Hecho con ☕ y dedicación.`;
+    // ========== SECCIÓN DESCARGAS ==========
+    const contenedorDescargas = document.getElementById('lista-archivos');
+    if (contenedorDescargas) {
+        cargarArchivosDescargables();
+    } else {
+        console.warn('No se encontró el contenedor de descargas');
     }
 
-    // ========== 2. EFECTO DE SOMBRA EN SECCIONES ==========
-    const sections = document.querySelectorAll('section');
-    sections.forEach(section => {
-        section.addEventListener('mouseenter', () => {
-            section.style.boxShadow = '0 8px 20px rgba(0,0,0,0.1)';
-        });
-        section.addEventListener('mouseleave', () => {
-            section.style.boxShadow = '0 4px 12px rgba(0,0,0,0.05)';
-        });
-    });
-
-    // ========== 3. CARGAR ARCHIVOS DESCARGABLES ==========
-    cargarArchivosDescargables();
-
     async function cargarArchivosDescargables() {
-        const contenedor = document.getElementById('lista-archivos');
-        if (!contenedor) return;
-
-        //
-        const usuario = 'RamiroNavarrete';
+        const usuario = 'RamiroNavarrete';  // ← CAMBIA A TU USUARIO REAL
         const repositorio = 'RamiroNavarrete.github.io';
         const ruta = 'downloads';
-
         const apiUrl = `https://api.github.com/repos/${usuario}/${repositorio}/contents/${ruta}`;
-
         try {
-            const respuesta = await fetch(apiUrl);
-            if (!respuesta.ok) {
-                if (respuesta.status === 404) {
-                    contenedor.innerHTML = '<p class="file-list-mensaje">📁 No hay archivos disponibles aún. Vuelve más tarde.</p>';
-                } else {
-                    contenedor.innerHTML = '<p class="file-list-mensaje">❌ Error al cargar los archivos.</p>';
-                }
-                return;
-            }
-
-            const archivos = await respuesta.json();
-            const soloArchivos = archivos.filter(item => item.type === 'file');
-
+            const resp = await fetch(apiUrl);
+            if (!resp.ok) throw new Error('No se pudo acceder a downloads');
+            const archivos = await resp.json();
+            const soloArchivos = archivos.filter(f => f.type === 'file');
             if (soloArchivos.length === 0) {
-                contenedor.innerHTML = '<p class="file-list-mensaje">📁 No hay archivos en la carpeta downloads/ todavía.</p>';
+                contenedorDescargas.innerHTML = '<p>📁 No hay archivos aún</p>';
                 return;
             }
-
-            let listaHtml = '<div class="file-list">';
-            soloArchivos.forEach(archivo => {
-                const nombre = archivo.name;
-                const urlDescarga = archivo.download_url;
-                listaHtml += `
-                    <div class="file-item">
-                        <span class="file-name">${escapeHtml(nombre)}</span>
-                        <a href="${urlDescarga}" class="download-btn" download>⬇️ Descargar</a>
-                    </div>
-                `;
+            let html = '<div class="file-list">';
+            soloArchivos.forEach(f => {
+                html += `<div class="file-item">
+                            <span class="file-name">${f.name}</span>
+                            <a href="${f.download_url}" class="download-btn" download>⬇️ Descargar</a>
+                         </div>`;
             });
-            listaHtml += '</div>';
-            contenedor.innerHTML = listaHtml;
+            html += '</div>';
+            contenedorDescargas.innerHTML = html;
         } catch (error) {
-            console.error('Error al obtener archivos:', error);
-            contenedor.innerHTML = '<p class="file-list-mensaje">⚠️ No se pudo conectar con GitHub. Inténtalo más tarde.</p>';
+            console.error('Error en descargas:', error);
+            contenedorDescargas.innerHTML = '<p>⚠️ No se pudieron cargar los archivos</p>';
         }
     }
 
-    function escapeHtml(texto) {
-        const div = document.createElement('div');
-        div.textContent = texto;
-        return div.innerHTML;
+    // ========== CALCULADORA ==========
+    // Verificar que los elementos de la calculadora existen
+    const expresionDiv = document.getElementById('expresion');
+    const resultadoDiv = document.getElementById('resultado');
+    const historialMini = document.getElementById('historial-mini');
+    const listaHistorial = document.getElementById('lista-historial');
+    const borrarHistorialBtn = document.getElementById('borrar-historial');
+
+    if (!expresionDiv) {
+        console.error('No se encontró el elemento expresion. La calculadora no funcionará.');
+        return;
     }
 
-    // ========== 4. CALCULADORA AVANZADA ==========
+    console.log('✅ Inicializando calculadora');
+
     let expresionActual = '';
     let resultadoActual = '';
     let memoria = 0;
     let historial = [];
 
-    // Elementos DOM
-    const expresionDiv = document.getElementById('expresion');
-    const resultadoDiv = document.getElementById('resultado');
-    const historialMini = document.getElementById('historial-mini');
-    const listaHistorial = document.getElementById('lista-historial');
-    const botonBorrarHistorial = document.getElementById('borrar-historial');
-
     function actualizarPantalla() {
-        expresionDiv.innerText = expresionActual || '0';
-        if (resultadoActual !== undefined && resultadoActual !== '') {
-            resultadoDiv.innerText = '= ' + resultadoActual;
-        } else {
-            resultadoDiv.innerText = '';
-        }
+        expresionDiv.innerText = expresionActual === '' ? '0' : expresionActual;
+        resultadoDiv.innerText = resultadoActual ? `= ${resultadoActual}` : '';
     }
 
     function agregarHistorial(operacion, resultado) {
         if (!operacion || operacion === '0') return;
-        const entrada = `${operacion} = ${resultado}`;
-        historial.unshift(entrada); // los más recientes arriba
+        historial.unshift(`${operacion} = ${resultado}`);
         if (historial.length > 10) historial.pop();
-        renderizarHistorial();
+        if (listaHistorial) {
+            listaHistorial.innerHTML = historial.map(item => `<li>${item}</li>`).join('');
+        }
         if (historialMini) historialMini.innerText = operacion;
     }
 
-    function renderizarHistorial() {
-        if (!listaHistorial) return;
-        listaHistorial.innerHTML = '';
-        historial.forEach(item => {
-            const li = document.createElement('li');
-            li.textContent = item;
-            listaHistorial.appendChild(li);
+    if (borrarHistorialBtn) {
+        borrarHistorialBtn.addEventListener('click', () => {
+            historial = [];
+            if (listaHistorial) listaHistorial.innerHTML = '';
+            if (historialMini) historialMini.innerText = '';
         });
     }
 
-    function borrarHistorial() {
-        historial = [];
-        renderizarHistorial();
-        if (historialMini) historialMini.innerText = '';
-    }
-
     function evaluarExpresion(expr) {
-        // Reemplazar símbolos visuales por operadores JS
-        let exprJs = expr.replace(/×/g, '*').replace(/÷/g, '/');
-        // Evaluar funciones científicas: sin(, cos(, tan(, sqrt(, log(, ln(
-        // Convertir, por ejemplo, 'sin(30)' a Math.sin(30 * Math.PI/180) para grados
-        // Pero para simplificar, usaremos radianes en funciones trigonométricas (el usuario puede ingresar radianes)
-        // Soporte para potencias: x^y -> **
-        exprJs = exprJs.replace(/(\d+(?:\.\d+)?)\s*\^\s*(\d+(?:\.\d+)?)/g, 'Math.pow($1, $2)');
-        exprJs = exprJs.replace(/sqrt\(([^)]+)\)/g, 'Math.sqrt($1)');
-        exprJs = exprJs.replace(/sin\(([^)]+)\)/g, 'Math.sin($1)');
-        exprJs = exprJs.replace(/cos\(([^)]+)\)/g, 'Math.cos($1)');
-        exprJs = exprJs.replace(/tan\(([^)]+)\)/g, 'Math.tan($1)');
-        exprJs = exprJs.replace(/log\(([^)]+)\)/g, 'Math.log10($1)');
-        exprJs = exprJs.replace(/ln\(([^)]+)\)/g, 'Math.log($1)');
-        
         try {
-            // Usar Function para evaluar (con precaución, pero es una calculadora local)
-            const resultado = Function('"use strict"; return (' + exprJs + ')')();
-            if (isNaN(resultado) || !isFinite(resultado)) throw new Error('Resultado no válido');
+            let exprJs = expr.replace(/×/g, '*').replace(/÷/g, '/');
+            // Potencias
+            exprJs = exprJs.replace(/(\d+(?:\.\d+)?)\s*\^\s*(\d+(?:\.\d+)?)/g, 'Math.pow($1, $2)');
+            // Funciones
+            exprJs = exprJs.replace(/sqrt\(([^)]+)\)/g, 'Math.sqrt($1)');
+            exprJs = exprJs.replace(/sin\(([^)]+)\)/g, 'Math.sin($1)');
+            exprJs = exprJs.replace(/cos\(([^)]+)\)/g, 'Math.cos($1)');
+            exprJs = exprJs.replace(/tan\(([^)]+)\)/g, 'Math.tan($1)');
+            exprJs = exprJs.replace(/log\(([^)]+)\)/g, 'Math.log10($1)');
+            exprJs = exprJs.replace(/ln\(([^)]+)\)/g, 'Math.log($1)');
+            // Evaluar
+            const resultado = Function('"use strict";return (' + exprJs + ')')();
+            if (isNaN(resultado) || !isFinite(resultado)) throw new Error();
             return parseFloat(resultado.toFixed(8));
         } catch (e) {
             return null;
@@ -162,9 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
             actualizarPantalla();
         } else {
             resultadoDiv.innerText = 'Error';
-            setTimeout(() => {
-                resultadoDiv.innerText = '';
-            }, 1500);
+            setTimeout(() => resultadoDiv.innerText = '', 1500);
         }
     }
 
@@ -175,8 +125,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         if (expresionActual === '') return;
-        const ultimoChar = expresionActual.slice(-1);
-        if ('+-*/×÷'.includes(ultimoChar)) {
+        const ultimo = expresionActual.slice(-1);
+        if ('+-*/×÷'.includes(ultimo)) {
             expresionActual = expresionActual.slice(0, -1) + op;
         } else {
             expresionActual += op;
@@ -189,80 +139,42 @@ document.addEventListener('DOMContentLoaded', () => {
             expresionActual = '';
             resultadoActual = '';
         }
-        if (num === '.' && expresionActual.slice(-1) === '.') return;
+        if (num === '.' && expresionActual.includes('.')) return;
         expresionActual += num;
         actualizarPantalla();
     }
 
     function manejarFuncion(func) {
         switch(func) {
-            case 'clear':
-                expresionActual = '';
-                resultadoActual = '';
-                actualizarPantalla();
-                break;
-            case 'backspace':
-                expresionActual = expresionActual.slice(0, -1);
-                actualizarPantalla();
-                break;
-            case 'igual':
-                manejarIgual();
-                break;
-            case 'memoria-mc':
-                memoria = 0;
-                break;
-            case 'memoria-m-plus':
-                const val = parseFloat(expresionActual);
-                if (!isNaN(val)) memoria += val;
-                break;
-            case 'memoria-m-minus':
-                const val2 = parseFloat(expresionActual);
-                if (!isNaN(val2)) memoria -= val2;
-                break;
-            case 'memoria-mr':
-                expresionActual = memoria.toString();
-                resultadoActual = '';
-                actualizarPantalla();
-                break;
-            case 'sqrt':
+            case 'clear': expresionActual = ''; resultadoActual = ''; actualizarPantalla(); break;
+            case 'backspace': expresionActual = expresionActual.slice(0, -1); actualizarPantalla(); break;
+            case 'igual': manejarIgual(); break;
+            case 'memoria-mc': memoria = 0; break;
+            case 'memoria-m-plus': memoria += parseFloat(expresionActual) || 0; break;
+            case 'memoria-m-minus': memoria -= parseFloat(expresionActual) || 0; break;
+            case 'memoria-mr': expresionActual = memoria.toString(); resultadoActual = ''; actualizarPantalla(); break;
+            case 'sqrt': 
                 if (expresionActual) {
-                    const num = parseFloat(expresionActual);
-                    if (!isNaN(num)) {
-                        expresionActual = `sqrt(${num})`;
-                        manejarIgual();
-                    }
-                } else {
-                    expresionActual = 'sqrt(';
-                    actualizarPantalla();
-                }
-                break;
+                    let n = parseFloat(expresionActual);
+                    if (!isNaN(n)) { expresionActual = `sqrt(${n})`; manejarIgual(); }
+                } else expresionActual = 'sqrt('; actualizarPantalla(); break;
             case 'pow2':
                 if (expresionActual) {
-                    const num = parseFloat(expresionActual);
-                    if (!isNaN(num)) {
-                        expresionActual = `${num}^2`;
-                        manejarIgual();
-                    }
-                }
-                break;
-            case 'pow':
-                expresionActual += '^';
-                actualizarPantalla();
-                break;
-            case 'sin':
-            case 'cos':
-            case 'tan':
-            case 'log':
-            case 'ln':
-                expresionActual += `${func}(`;
-                actualizarPantalla();
-                break;
+                    let n = parseFloat(expresionActual);
+                    if (!isNaN(n)) { expresionActual = `${n}^2`; manejarIgual(); }
+                } break;
+            case 'pow': expresionActual += '^'; actualizarPantalla(); break;
+            case 'sin': case 'cos': case 'tan': case 'log': case 'ln':
+                expresionActual += `${func}(`; actualizarPantalla(); break;
             default:
-                break;
+                if (func === '(' || func === ')') {
+                    expresionActual += func;
+                    actualizarPantalla();
+                }
         }
     }
 
-    // Eventos de botones
+    // Asignar eventos a los botones
     document.querySelectorAll('.btn-num').forEach(btn => {
         btn.addEventListener('click', () => manejarNumero(btn.getAttribute('data-num')));
     });
@@ -270,27 +182,30 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => manejarOperador(btn.getAttribute('data-op')));
     });
     document.querySelectorAll('.btn-func, .btn-cientifico').forEach(btn => {
-        btn.addEventListener('click', () => manejarFuncion(btn.getAttribute('data-func')));
+        btn.addEventListener('click', () => {
+            const func = btn.getAttribute('data-func');
+            if (func) manejarFuncion(func);
+            else {
+                const op = btn.getAttribute('data-op');
+                if (op) manejarOperador(op);
+            }
+        });
     });
-    if (botonBorrarHistorial) {
-        botonBorrarHistorial.addEventListener('click', borrarHistorial);
-    }
 
-    // Soporte teclado
+    // Teclado
     window.addEventListener('keydown', (e) => {
         const key = e.key;
         if (/[0-9]/.test(key)) manejarNumero(key);
         else if (key === '.') manejarNumero('.');
-        else if (key === '+' || key === '-' || key === '*' || key === '/') {
-            let op = key;
-            if (op === '*') op = '×';
-            if (op === '/') op = '÷';
-            manejarOperador(op);
-        }
+        else if (key === '+') manejarOperador('+');
+        else if (key === '-') manejarOperador('-');
+        else if (key === '*') manejarOperador('×');
+        else if (key === '/') manejarOperador('÷');
         else if (key === 'Enter' || key === '=') manejarFuncion('igual');
         else if (key === 'Escape') manejarFuncion('clear');
         else if (key === 'Backspace') manejarFuncion('backspace');
     });
 
     actualizarPantalla();
+    console.log('🚀 Calculadora lista');
 });
