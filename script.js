@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     async function cargarArchivosDescargables() {
-        const usuario = 'ramironavarrete';  // 
+        const usuario = 'RamiroNavarrete';  // 
         const repositorio = 'RamiroNavarrete.github.io';
         const ruta = 'downloads';
         const apiUrl = `https://api.github.com/repos/${usuario}/${repositorio}/contents/${ruta}`;
