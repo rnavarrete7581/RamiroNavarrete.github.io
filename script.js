@@ -1,26 +1,19 @@
-// script.js - Calculadora avanzada + descargas
+// script.js - Calculadora avanzada + Descargas manuales
 document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ DOM cargado - Iniciando aplicación');
 
-    // ========== SECCIÓN DESCARGAS ==========
-    const contenedorDescargas = document.getElementById('lista-archivos');
-    if (contenedorDescargas) {
-        cargarArchivosDescargables();
-    } else {
-        console.warn('No se encontró el contenedor de descargas');
-    }
-
-       function cargarArchivosDescargables() {
+    // ========== 1. SECCIÓN DESCARGAS (MANUAL, SIN API) ==========
+    function cargarArchivosDescargables() {
         const contenedor = document.getElementById('lista-archivos');
         if (!contenedor) return;
 
-        // Lista manual de tus archivos (los que tienes en /downloads/)
+        // ✅ LISTA MANUAL DE TUS ARCHIVOS (edita aquí cuando subas nuevos)
         const archivos = [
             { 
                 nombre: "Ramiro Navarrete ACT 1.pdf", 
                 url: "https://RamiroNavarrete.github.io/downloads/Ramiro%20Navarrete%20ACT%201.pdf"
             }
-            // Si subes más archivos, agrégalos aquí separados por coma
+            // Si tienes más archivos, añádelos aquí separados por coma
         ];
 
         if (archivos.length === 0) {
@@ -32,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
         archivos.forEach(archivo => {
             listaHtml += `
                 <div class="file-item">
-                    <span class="file-name">📄 ${archivo.nombre}</span>
+                    <span class="file-name">📄 ${escapeHtml(archivo.nombre)}</span>
                     <a href="${archivo.url}" class="download-btn" download>⬇️ Descargar</a>
                 </div>
             `;
@@ -41,8 +34,16 @@ document.addEventListener('DOMContentLoaded', function() {
         contenedor.innerHTML = listaHtml;
     }
 
-    // ========== CALCULADORA ==========
-    // Verificar que los elementos de la calculadora existen
+    function escapeHtml(texto) {
+        const div = document.createElement('div');
+        div.textContent = texto;
+        return div.innerHTML;
+    }
+
+    // Cargar descargas al inicio
+    cargarArchivosDescargables();
+
+    // ========== 2. CALCULADORA AVANZADA ==========
     const expresionDiv = document.getElementById('expresion');
     const resultadoDiv = document.getElementById('resultado');
     const historialMini = document.getElementById('historial-mini');
@@ -87,16 +88,13 @@ document.addEventListener('DOMContentLoaded', function() {
     function evaluarExpresion(expr) {
         try {
             let exprJs = expr.replace(/×/g, '*').replace(/÷/g, '/');
-            // Potencias
             exprJs = exprJs.replace(/(\d+(?:\.\d+)?)\s*\^\s*(\d+(?:\.\d+)?)/g, 'Math.pow($1, $2)');
-            // Funciones
             exprJs = exprJs.replace(/sqrt\(([^)]+)\)/g, 'Math.sqrt($1)');
             exprJs = exprJs.replace(/sin\(([^)]+)\)/g, 'Math.sin($1)');
             exprJs = exprJs.replace(/cos\(([^)]+)\)/g, 'Math.cos($1)');
             exprJs = exprJs.replace(/tan\(([^)]+)\)/g, 'Math.tan($1)');
             exprJs = exprJs.replace(/log\(([^)]+)\)/g, 'Math.log10($1)');
             exprJs = exprJs.replace(/ln\(([^)]+)\)/g, 'Math.log($1)');
-            // Evaluar
             const resultado = Function('"use strict";return (' + exprJs + ')')();
             if (isNaN(resultado) || !isFinite(resultado)) throw new Error();
             return parseFloat(resultado.toFixed(8));
@@ -176,7 +174,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Asignar eventos a los botones
     document.querySelectorAll('.btn-num').forEach(btn => {
         btn.addEventListener('click', () => manejarNumero(btn.getAttribute('data-num')));
     });
@@ -194,7 +191,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Teclado
     window.addEventListener('keydown', (e) => {
         const key = e.key;
         if (/[0-9]/.test(key)) manejarNumero(key);
