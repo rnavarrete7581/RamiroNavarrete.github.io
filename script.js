@@ -29,9 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!contenedor) return;
 
         // Usamos la API de GitHub para listar el contenido de la carpeta "downloads"
-        // NOTA: Reemplaza "ramiro-navarrete" con tu nombre de usuario real
-        const usuario = 'ramiro-navarrete'; // ¡CAMBIA ESTO POR TU USUARIO!
-        const repositorio = 'ramiro-navarrete.github.io';
+        //
+        const usuario = 'RamiroNavarrete'; // ¡CAMBIA ESTO POR TU USUARIO!
+        const repositorio = 'RamiroNavarrete.github.io';
         const ruta = 'downloads'; // carpeta donde están los archivos
 
         const apiUrl = `https://api.github.com/repos/${usuario}/${repositorio}/contents/${ruta}`;
