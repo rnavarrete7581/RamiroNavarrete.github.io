@@ -116,6 +116,69 @@ h3 {
     margin: 0.5rem 0;
 }
 
+/* Estilos para la lista de archivos descargables */
+.file-list {
+    background: #f1f5f9;
+    border-radius: 0.75rem;
+    padding: 0;
+    margin-top: 1rem;
+    overflow: hidden;
+}
+
+.file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid #e2e8f0;
+    transition: background 0.2s;
+}
+
+.file-item:last-child {
+    border-bottom: none;
+}
+
+.file-item:hover {
+    background: #e6edf5;
+}
+
+.file-name {
+    font-weight: 500;
+    word-break: break-all;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.file-name::before {
+    content: "📄";
+    font-size: 1.2rem;
+}
+
+.download-btn {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 2rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.download-btn:hover {
+    background-color: #1e40af;
+    text-decoration: none;
+}
+
+.nota {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-top: 0.8rem;
+    font-style: italic;
+}
+
 a {
     color: #3b82f6;
     text-decoration: none;
@@ -154,5 +217,13 @@ footer {
     }
     section {
         padding: 1.2rem;
+    }
+    .file-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    .download-btn {
+        align-self: flex-start;
     }
 }
