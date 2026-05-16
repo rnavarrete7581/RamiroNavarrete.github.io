@@ -25,7 +25,6 @@
             <h2>📂 Archivos para descargar</h2>
             <p>Aquí puedes encontrar documentos, apuntes o recursos que comparto. Haz clic en cualquier archivo para descargarlo.</p>
             <div id="lista-archivos" class="file-list">
-                <!-- Aquí se cargarán dinámicamente los archivos de la carpeta /downloads/ -->
                 <p>Cargando lista de archivos...</p>
             </div>
             <p class="nota">⚠️ Si no ves archivos, es porque aún no he subido ninguno. ¡Vuelve pronto!</p>
@@ -44,13 +43,64 @@
 
         <section id="proyectos">
             <h2>Proyectos destacados</h2>
-            <div class="proyecto">
-                <h3>Mi primer sitio web</h3>
-                <p>Este mismo sitio que estás viendo, desarrollado con HTML, CSS y JS, alojado en GitHub Pages.</p>
-            </div>
-            <div class="proyecto">
-                <h3>Calculadora simple</h3>
-                <p>Una pequeña aplicación web que realiza operaciones aritméticas básicas (próximamente en mi repositorio).</p>
+            <div class="proyecto calculadora-proyecto">
+                <h3>🧮 Calculadora avanzada</h3>
+                <p>Calculadora científica con historial, memoria y soporte para teclado.</p>
+                <div class="calculadora-container">
+                    <div class="calculadora">
+                        <div class="pantalla">
+                            <div class="historial-mini" id="historial-mini"></div>
+                            <div class="expresion" id="expresion">0</div>
+                            <div class="resultado" id="resultado"></div>
+                        </div>
+                        <div class="botones">
+                            <button class="btn-func" data-func="memoria-mc">MC</button>
+                            <button class="btn-func" data-func="memoria-m-plus">M+</button>
+                            <button class="btn-func" data-func="memoria-m-minus">M-</button>
+                            <button class="btn-func" data-func="memoria-mr">MR</button>
+
+                            <button class="btn-func" data-op="(">(</button>
+                            <button class="btn-func" data-op=")">)</button>
+                            <button class="btn-func" data-func="clear">C</button>
+                            <button class="btn-func" data-func="backspace">⌫</button>
+
+                            <button class="btn-num" data-num="7">7</button>
+                            <button class="btn-num" data-num="8">8</button>
+                            <button class="btn-num" data-num="9">9</button>
+                            <button class="btn-op" data-op="/">÷</button>
+
+                            <button class="btn-num" data-num="4">4</button>
+                            <button class="btn-num" data-num="5">5</button>
+                            <button class="btn-num" data-num="6">6</button>
+                            <button class="btn-op" data-op="*">×</button>
+
+                            <button class="btn-num" data-num="1">1</button>
+                            <button class="btn-num" data-num="2">2</button>
+                            <button class="btn-num" data-num="3">3</button>
+                            <button class="btn-op" data-op="-">-</button>
+
+                            <button class="btn-num" data-num="0">0</button>
+                            <button class="btn-num" data-num=".">.</button>
+                            <button class="btn-func" data-func="igual">=</button>
+                            <button class="btn-op" data-op="+">+</button>
+
+                            <!-- Funciones avanzadas -->
+                            <button class="btn-cientifico" data-func="sqrt">√</button>
+                            <button class="btn-cientifico" data-func="pow2">x²</button>
+                            <button class="btn-cientifico" data-func="pow">xʸ</button>
+                            <button class="btn-cientifico" data-func="sin">sin</button>
+                            <button class="btn-cientifico" data-func="cos">cos</button>
+                            <button class="btn-cientifico" data-func="tan">tan</button>
+                            <button class="btn-cientifico" data-func="log">log</button>
+                            <button class="btn-cientifico" data-func="ln">ln</button>
+                        </div>
+                    </div>
+                    <div class="historial-lateral">
+                        <h4>Historial</h4>
+                        <ul id="lista-historial"></ul>
+                        <button id="borrar-historial" class="btn-borrar">Borrar historial</button>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -58,8 +108,10 @@
             <h2>Contacto</h2>
             <p>¿Quieres conversar o colaborar en algún proyecto? Escríbeme:</p>
             <ul class="contact-list">
-                <li>📧 <a href="mailto:rnavarrete7581@utm.edu.ec">rnavarrete7581@utm.edu.ec</a></li>
-                <li>🐙 <a href="https://github.com/ramiro-navarrete" target="_blank">GitHub: ramiro-navarrete</a></li>
+                <li>📧 <a href="mailto:
+rnavarrete7581@utm.edu.ec">
+rnavarrete7581@utm.edu.ec</a></li>
+                <li>🐙 <a href="https://github.com/RamiroNavarrete" target="_blank">GitHub: RamiroNavarrete</a></li>
             </ul>
         </section>
     </main>
