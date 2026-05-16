@@ -10,33 +10,35 @@ document.addEventListener('DOMContentLoaded', function() {
         console.warn('No se encontró el contenedor de descargas');
     }
 
-    async function cargarArchivosDescargables() {
-        const usuario = 'RamiroNavarrete';  // 
-        const repositorio = 'RamiroNavarrete.github.io';
-        const ruta = 'downloads';
-        const apiUrl = `https://api.github.com/repos/${usuario}/${repositorio}/contents/${ruta}`;
-        try {
-            const resp = await fetch(apiUrl);
-            if (!resp.ok) throw new Error('No se pudo acceder a downloads');
-            const archivos = await resp.json();
-            const soloArchivos = archivos.filter(f => f.type === 'file');
-            if (soloArchivos.length === 0) {
-                contenedorDescargas.innerHTML = '<p>📁 No hay archivos aún</p>';
-                return;
+       function cargarArchivosDescargables() {
+        const contenedor = document.getElementById('lista-archivos');
+        if (!contenedor) return;
+
+        // Lista manual de tus archivos (los que tienes en /downloads/)
+        const archivos = [
+            { 
+                nombre: "Ramiro Navarrete ACT 1.pdf", 
+                url: "https://RamiroNavarrete.github.io/downloads/Ramiro%20Navarrete%20ACT%201.pdf"
             }
-            let html = '<div class="file-list">';
-            soloArchivos.forEach(f => {
-                html += `<div class="file-item">
-                            <span class="file-name">${f.name}</span>
-                            <a href="${f.download_url}" class="download-btn" download>⬇️ Descargar</a>
-                         </div>`;
-            });
-            html += '</div>';
-            contenedorDescargas.innerHTML = html;
-        } catch (error) {
-            console.error('Error en descargas:', error);
-            contenedorDescargas.innerHTML = '<p>⚠️ No se pudieron cargar los archivos</p>';
+            // Si subes más archivos, agrégalos aquí separados por coma
+        ];
+
+        if (archivos.length === 0) {
+            contenedor.innerHTML = '<p>📁 No hay archivos disponibles aún. Vuelve pronto.</p>';
+            return;
         }
+
+        let listaHtml = '<div class="file-list">';
+        archivos.forEach(archivo => {
+            listaHtml += `
+                <div class="file-item">
+                    <span class="file-name">📄 ${archivo.nombre}</span>
+                    <a href="${archivo.url}" class="download-btn" download>⬇️ Descargar</a>
+                </div>
+            `;
+        });
+        listaHtml += '</div>';
+        contenedor.innerHTML = listaHtml;
     }
 
     // ========== CALCULADORA ==========
