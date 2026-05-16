@@ -201,29 +201,154 @@ footer {
     margin-top: auto;
 }
 
-/* Responsive */
-@media (max-width: 640px) {
-    header h1 {
-        font-size: 1.8rem;
-    }
-    .tagline {
-        font-size: 1rem;
-    }
-    h2 {
-        font-size: 1.5rem;
-    }
-    .container {
-        width: 95%;
-    }
-    section {
-        padding: 1.2rem;
-    }
-    .file-item {
+/* ================== ESTILOS CALCULADORA ================== */
+.calculadora-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.calculadora {
+    flex: 2;
+    min-width: 260px;
+    background: #0f172a;
+    border-radius: 1.5rem;
+    padding: 1rem;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2);
+}
+
+.pantalla {
+    background: #1e293b;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    text-align: right;
+    color: white;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+.historial-mini {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    min-height: 1.2rem;
+}
+
+.expresion {
+    font-size: 1.8rem;
+    font-weight: 600;
+    min-height: 3rem;
+}
+
+.resultado {
+    font-size: 1.2rem;
+    color: #3b82f6;
+    min-height: 1.8rem;
+}
+
+.botones {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+}
+
+.botones button {
+    background: #334155;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 0.75rem 0;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    font-family: monospace;
+}
+
+.botones button:active {
+    transform: scale(0.96);
+    background: #475569;
+}
+
+.botones .btn-op {
+    background: #3b82f6;
+}
+
+.botones .btn-func {
+    background: #475569;
+}
+
+.botones .btn-cientifico {
+    background: #0f766e;
+    font-size: 0.9rem;
+}
+
+.botones .btn-cientifico:active {
+    background: #0d9488;
+}
+
+.historial-lateral {
+    flex: 1;
+    min-width: 180px;
+    background: #f8fafc;
+    border-radius: 1rem;
+    padding: 0.8rem;
+    border: 1px solid #e2e8f0;
+}
+
+.historial-lateral h4 {
+    margin-bottom: 0.5rem;
+    text-align: center;
+    color: #0f172a;
+}
+
+#lista-historial {
+    list-style: none;
+    max-height: 250px;
+    overflow-y: auto;
+    padding: 0;
+    margin-bottom: 0.5rem;
+}
+
+#lista-historial li {
+    background: white;
+    margin-bottom: 0.3rem;
+    padding: 0.3rem 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    font-family: monospace;
+    border-left: 3px solid #3b82f6;
+    word-break: break-all;
+}
+
+.btn-borrar {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 0.3rem 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.7rem;
+    cursor: pointer;
+    width: 100%;
+}
+
+.btn-borrar:hover {
+    background: #dc2626;
+}
+
+@media (max-width: 700px) {
+    .calculadora-container {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
     }
-    .download-btn {
-        align-self: flex-start;
+    .historial-lateral {
+        width: 100%;
+    }
+    .botones button {
+        font-size: 1rem;
+        padding: 0.6rem 0;
+    }
+    .expresion {
+        font-size: 1.4rem;
     }
 }
