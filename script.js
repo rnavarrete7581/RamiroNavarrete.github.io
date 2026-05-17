@@ -1,4 +1,4 @@
-// script.js - Calculadora avanzada + Descargas manuales
+// script.js - Calculadora avanzada + Descargas manuales (usuario rnavarrete7581)
 document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ DOM cargado - Iniciando aplicación');
 
@@ -7,13 +7,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const contenedor = document.getElementById('lista-archivos');
         if (!contenedor) return;
 
-        // ✅ LISTA MANUAL DE TUS ARCHIVOS (edita aquí cuando subas nuevos)
+        // ✅ LISTA MANUAL DE TUS ARCHIVOS (usa la URL raw de GitHub)
+        // IMPORTANTE: Reemplaza 'nombre-del-archivo.pdf' y 'URL-raw'
         const archivos = [
             { 
-                nombre: "RamiroNavarreteACT1.pdf", 
-                url: "https://github.com/rnavarrete7581/RamiroNavarrete.github.io/blob/main/downloads/RamiroNavarreteACT1.pdf"
+                nombre: "Ramiro Navarrete ACT 1.pdf", 
+                url: "https://raw.githubusercontent.com/rnavarrete7581/rnavarrete7581.github.io/main/downloads/Ramiro%20Navarrete%20ACT%201.pdf"
             }
-            // 
+            // Añade más archivos aquí si los tienes
         ];
 
         if (archivos.length === 0) {
@@ -40,10 +41,9 @@ document.addEventListener('DOMContentLoaded', function() {
         return div.innerHTML;
     }
 
-    // Cargar descargas al inicio
     cargarArchivosDescargables();
 
-    // ========== 2. CALCULADORA AVANZADA ==========
+    // ========== 2. CALCULADORA AVANZADA (sin cambios) ==========
     const expresionDiv = document.getElementById('expresion');
     const resultadoDiv = document.getElementById('resultado');
     const historialMini = document.getElementById('historial-mini');
@@ -51,11 +51,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const borrarHistorialBtn = document.getElementById('borrar-historial');
 
     if (!expresionDiv) {
-        console.error('No se encontró el elemento expresion. La calculadora no funcionará.');
+        console.error('No se encontró el elemento expresion');
         return;
     }
-
-    console.log('✅ Inicializando calculadora');
 
     let expresionActual = '';
     let resultadoActual = '';
