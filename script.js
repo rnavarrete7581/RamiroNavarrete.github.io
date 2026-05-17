@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 nombre: "RamiroNavarreteACT1.pdf", 
                 url: "https://github.com/rnavarrete7581/RamiroNavarrete.github.io/blob/main/downloads/RamiroNavarreteACT1.pdf"
             }
-            // Si tienes más archivos, añádelos aquí separados por coma
+            // 
         ];
 
         if (archivos.length === 0) {
