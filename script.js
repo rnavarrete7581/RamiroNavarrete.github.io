@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const archivos = [
             { 
                 nombre: "Ramiro Navarrete ACT 1.pdf", 
-                url: "https://github.com/rnavarrete7581/RamiroNavarrete.github.io/blob/main/downloads/Ramiro%20Navarrete%20ACT%201.pdf"
+                url: "https://github.com/rnavarrete7581/RamiroNavarrete.github.io/blob/main/downloads/RamiroNavarreteACT1.pdf"
             }
             // Si tienes más archivos, añádelos aquí separados por coma
         ];
