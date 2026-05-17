@@ -89,8 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const estiloBienvenida = 'color: #3b82f6; font-size: 16px; font-weight: bold;';
     console.log('%c✨ ¡Bienvenido/a al sitio de Ramiro! ✨', estiloBienvenida);
     console.log('Explora, contacta o descarga archivos desde la sección correspondiente 😊');
-
-    // ========== 2. CALCULADORA AVANZADA (sin cambios) ==========
+    
+// ========== 2. CALCULADORA AVANZADA ==========
     const expresionDiv = document.getElementById('expresion');
     const resultadoDiv = document.getElementById('resultado');
     const historialMini = document.getElementById('historial-mini');
@@ -98,9 +98,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const borrarHistorialBtn = document.getElementById('borrar-historial');
 
     if (!expresionDiv) {
-        console.error('No se encontró el elemento expresion');
+        console.error('❌ No se encontró el elemento "expresion". Verifica que el HTML tenga <div id="expresion">');
         return;
     }
+
+    console.log('✅ Inicializando calculadora');
 
     let expresionActual = '';
     let resultadoActual = '';
@@ -219,6 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Asignar eventos a los botones de la calculadora
     document.querySelectorAll('.btn-num').forEach(btn => {
         btn.addEventListener('click', () => manejarNumero(btn.getAttribute('data-num')));
     });
@@ -236,6 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Teclado
     window.addEventListener('keydown', (e) => {
         const key = e.key;
         if (/[0-9]/.test(key)) manejarNumero(key);
@@ -252,4 +256,3 @@ document.addEventListener('DOMContentLoaded', () => {
     actualizarPantalla();
     console.log('🚀 Calculadora lista');
 });
-
